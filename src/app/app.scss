@@ -1,0 +1,359 @@
+@use "sass:color";
+
+// --- VARIABLES Y COLORES ---
+$primary: #3b82f6; // Un azul moderno
+$bg: #f8fafc;
+$surface: #ffffff;
+$text: #1e293b;
+$text-light: #64748b;
+$border: #e2e8f0;
+
+// Métodos
+$get: #10b981;
+$post: #f59e0b;
+$put: #3b82f6;
+$delete: #ef4444;
+$patch: #8b5cf6;
+
+:host {
+  display: block;
+  min-height: 100vh;
+  color: $text;
+}
+
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+// --- NAVBAR ---
+.navbar {
+  width: 100%;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: $surface;
+  // No usamos borde abajo, usamos espacio para separar
+  
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+  
+  .btn-icon {
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background 0.2s;
+    &:hover { background: $border; }
+  }
+}
+
+.container {
+  width: 100%;
+  max-width: 800px; // Ancho limitado para lectura cómoda
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+// --- BARRA DE PETICIÓN (HERO) ---
+.request-card {
+  background: $surface;
+  padding: 6px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px -2px rgba(0,0,0,0.05); // Sombra muy suave
+  border: 1px solid $border;
+}
+
+.input-wrapper {
+  display: flex;
+  height: 48px;
+  
+  .method-select-wrapper {
+    position: relative;
+    min-width: 100px;
+    border-right: 1px solid $border;
+    
+    select {
+      appearance: none; // Quitar flecha fea nativa
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: transparent;
+      padding: 0 1rem;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-align: center;
+      
+      // Colores dinámicos para el texto del select
+      &.GET { color: $get; }
+      &.POST { color: $post; }
+      &.PUT { color: $put; }
+      &.DELETE { color: $delete; }
+      &.PATCH { color: $patch; }
+    }
+  }
+
+  .url-input {
+    flex: 1;
+    border: none;
+    padding: 0 1rem;
+    font-size: 0.95rem;
+    font-family: 'JetBrains Mono', monospace; // Fuente monoespaciada para la URL
+    color: $text;
+    outline: none;
+    background: transparent;
+    
+    &::placeholder { color: #cbd5e1; }
+  }
+
+  .btn-send {
+    background: $primary;
+    color: white;
+    border: none;
+    padding: 0 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 4px;
+    transition: all 0.2s;
+    
+    &:hover { 
+        // ESTA ES LA LÍNEA CORREGIDA:
+        background: color.adjust($primary, $lightness: -5%); 
+        transform: translateY(-1px); 
+    }
+
+    &:active { transform: translateY(0); }
+    &:disabled { background: $text-light; cursor: wait; }
+  }
+}
+
+// --- TABS ---
+.tabs-container {
+  
+  .tabs-nav {
+    display: flex;
+    gap: 2rem;
+    border-bottom: 1px solid $border;
+    margin-bottom: 1.5rem;
+    
+    .tab-link {
+      background: none;
+      border: none;
+      padding: 0.5rem 0;
+      color: $text-light;
+      font-weight: 500;
+      cursor: pointer;
+      position: relative;
+      transition: color 0.2s;
+      
+      &:hover { color: $primary; }
+      
+      &.active {
+        color: $primary;
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -1px;
+          left: 0;
+          width: 100%;
+          height: 2px;
+          background: $primary;
+        }
+      }
+      
+      &:disabled { opacity: 0.3; cursor: not-allowed; }
+    }
+  }
+}
+
+.row-input {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  
+  input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid $border;
+    border-radius: 6px;
+    outline: none;
+    transition: border 0.2s;
+    &:focus { border-color: $primary; }
+  }
+  
+  .btn-delete {
+    background: none; border: none; color: $text-light; cursor: pointer; font-size: 1.2rem;
+    &:hover { color: $delete; }
+  }
+}
+
+.code-editor {
+  width: 100%;
+  min-height: 200px;
+  padding: 1rem;
+  background: #1e1e1e; // Fondo oscuro estilo VS Code
+  color: #d4d4d4;
+  font-family: 'JetBrains Mono', monospace;
+  border-radius: 8px;
+  border: none;
+  resize: vertical;
+}
+
+.btn-text {
+  background: none; border: none; color: $primary; font-weight: 500; cursor: pointer; margin-top: 5px;
+}
+
+// --- RESPUESTA ---
+.response-area {
+  margin-top: 2rem;
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.response-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  
+  .status-pill {
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    
+    &.text-green { background: #dcfce7; color: #166534; }
+    &.text-orange { background: #fef3c7; color: #92400e; }
+    &.text-red { background: #fee2e2; color: #991b1b; }
+  }
+  
+  .metrics {
+    color: $text-light;
+    font-size: 0.85rem;
+    span { margin-left: 15px; }
+  }
+}
+
+.code-block {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 8px;
+  padding: 1.5rem;
+  overflow-x: auto;
+  max-height: 600px;
+}
+
+// --- ESTADO VACÍO ---
+.empty-state {
+  text-align: center;
+  margin-top: 4rem;
+  color: $text-light;
+  .illustration { font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; }
+}
+
+// --- HISTORIAL SIDEBAR (DRAWER) ---
+.history-sidebar {
+  position: fixed;
+  top: 0;
+  right: -300px; // Oculto por defecto
+  width: 300px;
+  height: 100vh;
+  background: $surface;
+  box-shadow: -5px 0 25px rgba(0,0,0,0.1);
+  z-index: 100;
+  transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  
+  &.open { right: 0; }
+  
+  .sidebar-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid $border;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    button { background: none; border: none; cursor: pointer; font-size: 1.2rem; }
+  }
+  
+  .history-list {
+    flex: 1;
+    overflow-y: auto;
+  }
+  
+  .history-item {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid $border;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    &:hover { background: #f1f5f9; }
+    
+    .url-truncate {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 0.85rem;
+      color: $text-light;
+    }
+  }
+
+  .sidebar-footer {
+    padding: 1rem;
+    border-top: 1px solid $border;
+    button {
+      width: 100%;
+      padding: 8px;
+      background: #fee2e2;
+      color: #ef4444;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  }
+}
+
+.overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.2); z-index: 99; backdrop-filter: blur(2px);
+}
+
+// Method tags tiny
+.method-tag.tiny {
+  font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; color: white; font-weight: bold;
+  &.GET { background: $get; }
+  &.POST { background: $post; }
+  &.DELETE { background: $delete; }
+  &.PUT { background: $put; }
+  &.PATCH { background: $patch; }
+}
+
+// Syntax Highlight (Necesita ::ng-deep porque se inyecta HTML dinámico)
+::ng-deep pre {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  margin: 0;
+  
+  .key { color: #3b82f6; }       
+  .string { color: #059669; }    
+  .number { color: #d97706; }    
+  .boolean { color: #db2777; }   
+  .null { color: #9ca3af; font-style: italic; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
